@@ -5,6 +5,10 @@ import java.util.Date;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Size;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description="Descrição sobre validação de paramentros")
 public class Payment {
 	
 	private Integer id;
@@ -12,9 +16,11 @@ public class Payment {
 	private String status;
 	
 	@Size(min=14, max=17, message="A quantidade de digitos de um cartão de crédito deve ser entre 14 e 17")
+	@ApiModelProperty(notes="A quantidade de digitos de um cartão de crédito deve ser entre 14 e 17")
 	private String creditcardNumber;
 	
 	@Future
+	@ApiModelProperty(notes="Plagamento deve ser efetuado no futuro")
 	private Date paymentDate;
 	
 	protected Payment() {
