@@ -31,10 +31,13 @@ public class PaymentResource{
 
 	@Autowired
 	private PaymentDaoService paymentDaoService;
-
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
+	
 	@GetMapping(path = "/payments")
 	public MappingJacksonValue retrieveAllPayments() {
-		List<Payment> payments = paymentDaoService.findAll();
+		List<Payment> payments = paymentRepository.findAll();
 		
 		SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter
 				.filterOutAllExcept("id","status","paymentDate");
@@ -49,7 +52,7 @@ public class PaymentResource{
 
 	@GetMapping(path = "/payments/{id}")
 	public MappingJacksonValue retrievePayment(@PathVariable int id) throws PaymentNotFoundException {
-		Payment payment = paymentDaoService.findOne(id);
+		Payment payment = paymentRepository.findOne(id);
 		
 		if(payment == null)
 			throw new PaymentNotFoundException("id - " + id);
@@ -63,7 +66,7 @@ public class PaymentResource{
 		
 		FilterProvider filters = new SimpleFilterProvider().addFilter("PaymentFilter", filter);
 		
-		MappingJacksonValue mapping = new MappingJacksonValue(payment);
+		MappingJacksonValue mapping = new MappingJacksonValue(paymentEntityModel);
 		mapping.setFilters(filters);
 		
 		return mapping;
@@ -71,7 +74,7 @@ public class PaymentResource{
 
 	@PostMapping("/payments")
 	public ResponseEntity<Object> createPayment(@Valid @RequestBody Payment payment) {
-		Payment savedPayment = paymentDaoService.save(payment);
+		Payment savedPayment = paymentRepository.save(payment);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedPayment.getId()).toUri();
 		return ResponseEntity.created(location).build();
 	}

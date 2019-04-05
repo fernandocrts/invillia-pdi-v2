@@ -2,6 +2,9 @@ package com.invilliatest.rest.webservices.restfulwebservices.payment;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Size;
 
@@ -12,8 +15,11 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description="Descrição sobre validação de paramentros")
 @JsonFilter("PaymentFilter")
+@Entity
 public class Payment {
 	
+	@Id
+	@GeneratedValue
 	private Integer id;
 	
 	private String status;
@@ -22,7 +28,8 @@ public class Payment {
 	@ApiModelProperty(notes="A quantidade de digitos de um cartão de crédito deve ser entre 14 e 17")
 	private String creditcardNumber;
 	
-	@Future
+
+	@Future 
 	@ApiModelProperty(notes="Plagamento deve ser efetuado no futuro")
 	private Date paymentDate;
 	
